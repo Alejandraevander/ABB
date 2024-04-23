@@ -45,8 +45,21 @@ except:
 with open(r'C:\Users\r14ale\Desktop\Scrapping_ABB\DL.txt', encoding="utf8") as file_1:
     long_description = file_1.read()
     soup = BeautifulSoup(long_description, 'lxml')
-    #print(soup.prettify())
-    Icon = soup.find_all('div', class_="dsDocumentThumbnail")
-    File_Name= soup.find_all('span', class_="dsTitle")
-    Link = soup.find_all('div', class_="dsDownloadLinks") 
-    
+    print(soup.prettify())
+    Icon_Thumbnail = soup.find_all('div', class_="dsDocument")
+    Doc_Name = soup.find_all('span', class_="dsTitle")
+    #File_Name= soup.find_all('span', class_="dsTitle")
+    #Link = soup.find_all('div', class_="dsDownloadLinks") 
+    with open(f"C:\\Users\\r14ale\\Desktop\\Scrapping_ABB\\{subfolder_name}\\Downloads.csv", mode='w', encoding='utf-8') as ContentData_1:
+        data_1 =csv.writer(ContentData_1)    
+        data_1.writerow(["Index","Icon","Doc_Name", "Doc ID", "PDF Download Link"])
+        for icon,doc in zip(Icon_Thumbnail,Doc_Name):
+            try:
+                Icon = icon.div.img['src']
+            except:
+                Icon = icon.div
+            Doc = doc.text
+            Doc_ID = doc.a['data-docid']
+            PDF_Link = doc.a['href']
+            data_1.writerow([Index_DW,Icon,Doc, Doc_ID, PDF_Link])
+            Index_DW = Index_DW+1
