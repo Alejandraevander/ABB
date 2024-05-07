@@ -10,6 +10,9 @@ import requests
 import pandas as pd
 import time
 import os
+import csv
+
+Index =  1
 
 # Define your desired user agent string
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.54"
@@ -35,22 +38,29 @@ driver = webdriver.Edge(service=service, options=options)
 driver.implicitly_wait(10)
 driver.get(web)
 
-#Start Code (Accept All cookies->Click on DL->Save all PDFs inside a folder allocated)
-driver.find_element(By.XPATH, '//a[@id="btnSelectAllCheckboxes"]').click()
-driver.find_element(By.XPATH,'//div[@data-tabname=".tab2"]').click()
-time.sleep(10)
-URL = driver.current_url
-response = requests.get(URL)
-content = response.content
-print(type(content))
-soup = BeautifulSoup(URL.content, "html.parser")
-print(soup)
-PDF_File = driver.find_element(By.XPATH, '//div[@class="dsColumn dsColumn1"]')
-PDF_File.find_element(By.XPATH,'//div[@class="dsDocument"]').click
-time.sleep(20)
+#shadowhost = driver.find_element(By.XPATH,'//div[@class="firstrow_productcol_one"]')
 
+# Find the element containing the shadow root
+element_with_shadow_root = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, "div.firstrow_productcol_one > pis-products-details-gallery"))
+)
+# Use JavaScript to access the shadow root
+shadow_root = driver.execute_script("return arguments[0].shadowRoot", element_with_shadow_root)
+#print(shadow_root)
+# Wait for the shadow root element to be present
 
-#Start Code (Go to DS->Save technical details inside multiple csv file with all the informations in a single folder for each item)
+element_with_shadow_root = WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.CSS_SELECTOR, "div.firstrow_productcol_one > pis-products-details-gallery"))
+)
+# Find all image elements
+image_elements = shadow_root.find_elements(By.XPATH, "//div[contains(@class, 'pis-gallery')]//img")
 
-#Start Code (Go to Main Page->DL all the images link available and put inside single csv file)
+# Extract src attributes and store them in a list
+src_list = [element.get_attribute("src") for element in image_elements]
 
+# Extract src attributes
+#image_src_list = [element.get_attribute("src") for element in image_elements]
+
+# Print or further process the src attributes
+#for src in image_src_list:
+#    print(src)
