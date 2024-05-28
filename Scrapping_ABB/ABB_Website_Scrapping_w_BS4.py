@@ -25,4 +25,4 @@ with open(r'C:\Users\r14ale\Desktop\Scrapping_ABB\output1.txt', 'r+', encoding="
     for jso in y:
          print(jso["masterUrl"])
    
-    
+#https://medium.com/@joshuanishanth120/how-to-scrape-data-inside-a-shadow-dom-encapsulation-using-python-1e3320433dd9
